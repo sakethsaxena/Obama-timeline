@@ -1,35 +1,78 @@
 <div class="row">
     <div class="col-sm-2">
-        <div class="row">
-            <div class="col">
-                <center>
-                    <ul class="list-group">
-                        <li class="list-group-item list-group-item-secondary">Year</li>
-                        <li class="list-group-item" ng-repeat="year in years" ng-click=data.getResultsForYear(year) ng-class="{active: year === selectedYear}">
-                            {{year}}
-                        </li>
-                    </ul>
-                </center>
+        <br />
+        <div id="accordion" role="tablist">
+            <div class="card">
+                <div class="card-header" role="tab" id="headingOne">
+                    <h6 class="mb-0">
+                        <a data-toggle="collapse" href="" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                            Year
+                            <span class="badge badge-pill badge-info">{{selectedYear}}</span>
+                        </a>
+                    </h6>
+                </div>
+
+                <div id="collapseOne" class="collapse show" role="tabpanel" aria-labelledby="headingOne" data-parent="#accordion">
+                    <div class="card-body">
+                        <ul class="list-group">
+                            <li class="list-group-item" ng-repeat="year in years" ng-click=data.getResultsForYear(year) ng-class="{active: year === selectedYear}">
+                                {{year}}
+                            </li>
+                        </ul>
+                    </div>
+                </div>
             </div>
-            <div class="col">
-                <center>
-                    <ul class="list-group">
-                        <li class="list-group-item list-group-item-secondary">Month</li>
-                        <li class="list-group-item" ng-repeat="month in months" ng-click=data.getResultsForMonth(month) ng-class="{active: month === selectedMonth}">
-                            {{month}}
-                        </li>
-                    </ul>
-                </center>
+            <div class="card">
+                <div class="card-header" role="tab" id="headingTwo">
+                    <h6 class="mb-0">
+                        <a class="collapsed" data-toggle="collapse" href="" data-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                            Month
+                            <span class="badge badge-pill badge-info">{{selectedMonth}}</span>
+                        </a>
+                    </h6>
+                </div>
+                <div id="collapseTwo" class="collapse" role="tabpanel" aria-labelledby="headingTwo" data-parent="#accordion">
+                    <div class="card-body">
+                        <ul class="list-group">
+                            <li class="list-group-item" ng-repeat="month in months" ng-click=data.getResultsForMonth(month) ng-class="{active: month === selectedMonth}">
+                                {{month}}
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="card">
+                <div class="card-header" role="tab" id="headingThree">
+                    <h6 class="mb-0">
+                        <a class="collapsed" href="" data-toggle="collapse" data-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+                            Post Types
+                            <span class="badge badge-pill badge-info">{{postsType}}</span>
+                        </a>
+                    </h6>
+                </div>
+                <div id="collapseThree" class="collapse" role="tabpanel" aria-labelledby="headingThree" data-parent="#accordion">
+                    <div class="card-body">
+                        <ul class="list-group">
+                            <li class="list-group-item" ng-repeat="type in displayTypes" ng-click=data.getResultsForType(type) ng-class="{active: type === postsType}">
+                                {{type}}
+                            </li>
+                        </ul>
+                    </div>
+                </div>
             </div>
         </div>
+
+
+
+
     </div>
-    <div class="col-sm-7">
+    <div class="col-sm-7 timeline-content">
 
         <div class="row">
-            
+
             <ul class="timeline">
-                <li ng-repeat="post in posts | orderBy : '-timestamp'" ng-class-even="'timeline-inverted'" >
-                    <div class="timeline-badge" ng-class="{tw: post.type == 'twp', fb: post.type == 'twf'}" >
+                <li ng-repeat="post in posts | orderBy : '-timestamp'" ng-class-even="'timeline-inverted'">
+                    <div class="timeline-badge" ng-class="{tw: post.type == 'twp', fb: post.type == 'twf'}">
                     </div>
                     <div class="timeline-panel">
                         <div class="timeline-heading">
@@ -40,61 +83,23 @@
                         </div>
                         <div class="timeline-body">
                             <p>{{post.text}}</p>
+                            <hr ng-if = "post.url" />
+                            <p class="post-url">
+                           <a href="{{post.url.split(',')[0]}}" target="_blank" >{{post.url.split(',')[0]}}</a>
+                           </p>
                         </div>
                     </div>
                 </li>
-                
-                <li>
-                    <div class="timeline-badge default">
-                        <i class="glyphicon glyphicon-home"></i>
-                    </div>
-                    <div class="timeline-panel">
-                        <div class="timeline-heading">
-                            <h4 class="timeline-title">Left Event</h4>
-                        </div>
-                        <div class="timeline-body">
-                            <p>Add more progress events and milestones to the left or right side of the timeline. Each event
-                                can be tagged with a date and given a beautiful icon to symbolize it's spectacular meaning.</p>
 
-                            <hr>
-                            <div class="btn-group">
-                                <button type="button" class="btn btn-primary btn-sm dropdown-toggle" data-toggle="dropdown">
-                                    <i class="glyphicon glyphicon-cog"></i>
-                                    <span class="caret"></span>
-                                </button>
-                                <ul class="dropdown-menu" role="menu">
-                                    <li>
-                                        <a href="#">Action</a>
-                                    </li>
-                                    <li>
-                                        <a href="#">Another action</a>
-                                    </li>
-                                    <li>
-                                        <a href="#">Something else here</a>
-                                    </li>
-                                    <li class="divider"></li>
-                                    <li>
-                                        <a href="#">Separated link</a>
-                                    </li>
-                                </ul>
-                            </div>
-                        </div>
-                    </div>
-                </li>
-                
-            </ul> 
+            </ul>
         </div>
 
 
     </div>
     <div class="col-sm-3">
-        <div class="card">
-            <img class="card-img-top" src="/images/placeholder.svg" alt="Card image cap">
-            <div class="card-body">
-                <h4 class="card-title">Card title</h4>
-                <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-                <a href="#" class="btn btn-primary">Go somewhere</a>
-            </div>
+        <div id="chart" class="chart-container">
+        </div>
+        <div id="bar" class="chart-container">
         </div>
     </div>
 </div>
