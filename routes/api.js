@@ -13,6 +13,23 @@ router.route('/posts/')
     });
   });
 
+  router.route('/count/:year/:month')
+  //gets count of posts in each month of a year
+  .get(function (req, res) {
+    query = {
+      "timestamp": {
+        "$gte": new Date(req.params.year, parseInt(req.params.month) - 1, 01),
+        "$lt": new Date(req.params.year, parseInt(req.params.month), 01)
+      }
+    }
+    Posts.count(query, function (err, post) {
+      if (err)
+        res.send(err);
+      console.log(post);
+      res.json(post);
+    });
+  });
+
 router.route('/posts/:type/:year')
   //gets posts of specified type in a year
 
