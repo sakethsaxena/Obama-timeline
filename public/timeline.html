@@ -1,6 +1,7 @@
 <div class="row">
     <div class="col-sm-2">
         <br />
+        <input type="text" ng-model="posts_filter" class="form-control" placeholder="Search Text"> <hr class = "m-1"/>
         <div id="accordion" role="tablist">
             <div class="card">
                 <div class="card-header" role="tab" id="headingOne">
@@ -68,13 +69,14 @@
     </div>
     <div class="col-sm-7 timeline-content">
 
-        <div class="row">
+        <div class="row" ng-show="posts.length">
 
             <ul class="timeline">
-                <li ng-repeat="post in posts | orderBy : '-timestamp'" ng-class-even="'timeline-inverted'">
-                    <div class="timeline-badge" ng-class="{tw: post.type == 'twp' || post.type == 'twf' || post.type == 'tww', fb: post.type == 'fb'}">
+                <li ng-repeat="post in posts | filter: posts_filter | orderBy : 'timestamp'" ng-class-even="'timeline-inverted'">
+                    <div class="timeline-badge" ng-class="{tw: post.type == 'twp' || post.type == 'twf' || post.type == 'tww', fb: post.type == 'fb', vine: post.type == 'v'}">
                     </div>
-                    <div class="timeline-panel">
+                    
+                    <div class="timeline-panel" ng-if="post">
                         <div class="timeline-heading">
                             <p>
                                 <small class="text-muted">
@@ -82,10 +84,11 @@
                             </p>
                         </div>
                         <div class="timeline-body">
+                            <span ng-if="post.media" > <video class="card-img-top" src="{{post.media}}" controls/> </span>
                             <p>{{post.text}}</p>
                             <hr ng-if="post.url" />
                             <p class="post-url">
-                                <a href="{{post.url.split(',')[0]}}" target="_blank">{{post.url.split(',')[0]}}</a>
+                                <a href="{{post.url.split(',')[0]}}" target="_blank">{{post.url.split(',')[0] | limitTo : 40}}</a>
                             </p>
                         </div>
                     </div>
@@ -93,27 +96,22 @@
 
             </ul>
         </div>
+        <div class="row alert alert-danger m-4" ng-show="!(posts|filter:posts_filter).length" role="alert">
+            Sorry! No posts found..
+        </div>
 
 
     </div>
     <div class="col-sm-3">
         <br />
         <center>
-            <div class="card">
-                <div id="chart"></div>
-                <div class="card-body">
-                    <h6 class="card-subtitle mb-2 text-muted">Post's Distribution in {{selectedMonth}} {{selectedYear}}</h6>
-
-                </div>
-            </div>
-
-            <div class="card">
-                <div id="bar"></div>
-                <div class="card-body">
-                    <h6 class="card-subtitle mb-2 text-muted">Post's in each month of year {{selectedYear}}</h6>
-
-                </div>
-            </div>
+        <h6 class="card-subtitle mb-2 text-muted" ng-show="posts.length">Post's Distribution in {{selectedMonth}} {{selectedYear}}</h6>
+        <div id="chart" ng-show="posts.length"></div>
+        <hr class = 'm-2'/>
+        <h6 class="card-subtitle mb-0 text-muted">Post's in each month of the Year {{selectedYear}}</h6>
+        <div id="bar"></div>
+        
+            
         </center>
     </div>
 </div>

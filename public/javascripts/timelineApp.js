@@ -26,12 +26,12 @@ app.factory('countService', function ($resource) {
 });
 
 app.controller('timelineController', function (postService, countService, $scope, $rootScope) {
-	$scope.years = [2016, 2015, 2014, 2013, 2012, 2011, 2010, 2009, 2008];
+	$scope.years = [2016, 2015, 2014, 2013, 2012, 2011, 2010, 2009];
 	$scope.months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
 	$scope.displayTypes = ['All', 'Twitter POTUS', 'Twitter FLOTUS', 'Twitter White House', 'Vine', 'Facebook'];
 
 	$scope.selectedYear = 2016;
-	$scope.selectedMonth = 'Jun';
+	$scope.selectedMonth = 'Jan';
 	$scope.postsType = 'All';
 	types = ['all', 'twp', 'twf', 'tww', 'v', 'fb'];
 	selectedPost = types[$scope.displayTypes.indexOf($scope.postsType)];
@@ -40,7 +40,6 @@ app.controller('timelineController', function (postService, countService, $scope
 	for(month in $scope.months){
 		monthData.push(countService.get({selectedYear:$scope.selectedYear, selectedMonth:month+1}));
 	}
-	console.log(monthData);
 
 	$scope.posts = postService.query({ type: selectedPost, selectedYear: $scope.selectedYear, selectedMonth: $scope.months.indexOf($scope.selectedMonth) + 1 });
 	drawPi($scope);
@@ -131,11 +130,10 @@ function drawBar(values, $scope) {
 	for(i=0;i<$scope.months.length;i++){
 		data.push({name:$scope.months[i],value:values[i]});
 	}
-	console.log(data);
 	
 	//set up svg using margin conventions - we'll need plenty of room on the left for labels
 	var margin = {
-		top: 2,
+		top: 0,
 		right: 25,
 		bottom: 2,
 		left: 60
@@ -208,8 +206,8 @@ function drawBar(values, $scope) {
 
 function drawPi($scope) {
 	$scope.posts.$promise.then(function (posts) {
-		$scope.types = ["twp", "tww", "twf"];
-		$scope.typesCount = [0, 0, 0];
+		$scope.types = ["twp", "tww", "twf", "v"];
+		$scope.typesCount = [0, 0, 0, 0];
 
 		for (post in posts) {
 			$scope.typesCount[$scope.types.indexOf($scope.posts[post].type)] += 1;
@@ -230,11 +228,13 @@ function drawPi($scope) {
 				case "tww":
 					name = "White House twitter";
 					break;
+				case "v":
+					name = "Vine";
+					break;
 			}
 			data = { 'name': name, 'percent': $scope.typesCount[i] };
 			dataset.push(data);
 		}
-		console.log(dataset);
 
 		var pie = d3.layout.pie()
 			.value(function (d) { return d.percent })
