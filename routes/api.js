@@ -25,7 +25,6 @@ router.route('/posts/')
     Posts.count(query, function (err, post) {
       if (err)
         res.send(err);
-      console.log(post);
       res.json(post);
     });
   });

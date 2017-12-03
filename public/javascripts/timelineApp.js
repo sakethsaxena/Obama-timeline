@@ -223,7 +223,7 @@ function drawPi($scope) {
 					name = "POTUS twitter";
 					break;
 				case "twf":
-					name = "FOTUS twitter";
+					name = "FLOTUS twitter";
 					break;
 				case "tww":
 					name = "White House twitter";
