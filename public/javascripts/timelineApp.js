@@ -172,9 +172,6 @@ function drawBar(values, $scope) {
 		})
 		.attr("height", y.rangeBand())
 		.attr("x", 0)
-		.transition()
-		.duration(700)
-		.ease("linear")
 		.attr("width", function (d) {
 			return x(d.value);
 		});
@@ -209,8 +206,10 @@ function drawPi($scope) {
 		$scope.types = ["twp", "tww", "twf", "v"];
 		$scope.typesCount = [0, 0, 0, 0];
 
+		var count = 0;
 		for (post in posts) {
 			$scope.typesCount[$scope.types.indexOf($scope.posts[post].type)] += 1;
+			count += 1;
 		}
 
 		var dataset = [];
@@ -232,7 +231,7 @@ function drawPi($scope) {
 					name = "Vine";
 					break;
 			}
-			data = { 'name': name, 'percent': $scope.typesCount[i] };
+			data = { 'name': name, 'percent':  Math.round(($scope.typesCount[i]/count)*100) };
 			dataset.push(data);
 		}
 
@@ -299,7 +298,7 @@ function drawPi($scope) {
 				.attr("dy", ".4em")
 				.attr("text-anchor", "middle")
 				.text(function (d) {
-					return d.data.percent;
+					return d.data.percent + "%";
 				})
 				.style({
 					fill: '#fff',
