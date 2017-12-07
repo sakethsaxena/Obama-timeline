@@ -6,8 +6,10 @@ var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 //initialize mongoose schemas
 require('./models/models');
-var mongoose = require('mongoose');                           //add for Mongo support
-mongoose.connect('mongodb://localhost/social-media');         //connect to Mongo
+var mongoose = require('mongoose');                           
+//added for Mongo support
+mongoose.connect('mongodb://localhost/social-media');         
+//connect to Mongo
 
 var index = require('./routes/index');
 var api = require('./routes/api');

@@ -1,6 +1,7 @@
 var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 
+//Creates schema of social media posts
 var postSchema = new mongoose.Schema({
 	text: {
         type: String,

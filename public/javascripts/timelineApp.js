@@ -18,10 +18,12 @@ app.config(function ($routeProvider) {
 });
 
 app.factory('postService', function ($resource) {
+	//Service to return posts of corresponding type, year and month
 	return $resource('/data/posts/:type/:selectedYear/:selectedMonth');
 });
 
 app.factory('countService', function ($resource) {
+	//Service to return count of posts of specified year and month
 	return $resource('/data/count/:selectedYear/:selectedMonth');
 });
 
@@ -38,6 +40,7 @@ app.controller('timelineController', function (postService, countService, $scope
 
 	monthData = [];
 	for(month in $scope.months){
+		//creating month data for page load
 		monthData.push(countService.get({selectedYear:$scope.selectedYear, selectedMonth:month+1}));
 	}
 
@@ -48,6 +51,7 @@ app.controller('timelineController', function (postService, countService, $scope
 	count = 0;
 	for(month in $scope.months){
 		countService.get({selectedYear: $scope.selectedYear, selectedMonth: month}).$promise.then(function (data) {
+			//Create the data variable to be sent to drawBar() function once the data is ready
 			value = 0;
 			count+=1;
 			if (data[2])
@@ -72,8 +76,6 @@ app.controller('timelineController', function (postService, countService, $scope
 		
 	}
 
-	//drawBar();
-
 	$scope.data = {
 		getResultsForYear: function (year) {
 			selectedPost = types[$scope.displayTypes.indexOf($scope.postsType)];
@@ -83,6 +85,7 @@ app.controller('timelineController', function (postService, countService, $scope
 			count = 0;
 			for(month in $scope.months){
 				countService.get({selectedYear:year, selectedMonth:month}).$promise.then(function (data) {
+					//create the data for the drawbar function
 					value = 0;
 					count+=1;
 					if (data[2])
@@ -124,10 +127,11 @@ app.controller('timelineController', function (postService, countService, $scope
 
 });
 
-
+//Function using d3 js to draw bar chart
 function drawBar(values, $scope) {
 	var data = [];
 	for(i=0;i<$scope.months.length;i++){
+		//creating the dataset
 		data.push({name:$scope.months[i],value:values[i]});
 	}
 	
@@ -200,7 +204,7 @@ function drawBar(values, $scope) {
 
 }
 
-
+//Function to draw pi chart using d3 js
 function drawPi($scope) {
 	$scope.posts.$promise.then(function (posts) {
 		$scope.types = ["twp", "tww", "twf", "v"];
@@ -214,6 +218,7 @@ function drawPi($scope) {
 
 		var dataset = [];
 		for (var i = 0; i < $scope.typesCount.length; i++) {
+			//creating the data set 
 			if ($scope.typesCount[i] == 0)
 				continue;
 			var name;
@@ -347,7 +352,6 @@ function drawPi($scope) {
 		};
 
 		setTimeout(restOfTheData, 1000);
-
 
 	});
 }
